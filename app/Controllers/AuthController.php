@@ -19,9 +19,15 @@ class AuthController extends BaseController
     public function login()
 {
     if ($this->request->getPost()) {
-        $username = $this->request->getVar('username');
-        $password = $this->request->getVar('password');
+        $rules = [
+        'username' => 'required|min_length[6]',
+        'password' => 'required|min_length[7]|numeric',
+        ];
 
+        if ($this->validate($rules)) {
+            $username = $this->request->getPost('username');
+            $password = $this->request->getPost('password');
+        
         $dataUser = $this->userModel ->where(['username' => $username])->first();
 
         if ($dataUser) {
@@ -39,6 +45,10 @@ class AuthController extends BaseController
             }
         } else {
             session()->setFlashdata('failed', 'Username Tidak Ditemukan');
+            return redirect()->back();
+        }
+    } else {
+        session()->setFlashdata('failed', $this->validator->listErrors());
             return redirect()->back();
         }
     } else {
