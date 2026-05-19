@@ -10,10 +10,10 @@ class UserSeeder extends Seeder
     {
         $faker = \Faker\Factory::create('id_ID');
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 1; $i++) {
             $data = [
-                'username' => $faker->userName,
-                'email' => $faker->email,
+                'username' => 'Muhammad Nafi',
+                'email' => 'keynafz29@gmail.com',
                 'password' => password_hash('1234567', PASSWORD_DEFAULT),
                 'role' => $faker->randomElement(['admin', 'guest']),
                 'created_at' => date("Y-m-d H:i:s"),
