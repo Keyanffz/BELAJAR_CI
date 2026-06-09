@@ -13,5 +13,5 @@
             </div> 
     <?php endforeach ?> 
 </div>
-              <!-- End Table with stripped rows -->
-               <?= $this->endSection() ?>
+<!-- End Table with stripped rows -->
+<?= $this->endSection() ?>

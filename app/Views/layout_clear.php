@@ -47,7 +47,7 @@ if(uri_string()!=""){
 <body> 
 	<main>
 	
-	  <?= $this->renderSection('content') ?> 
+	  <?= $this->renderSection('main') ?> 
 	  
 	</main><!-- End #main -->
 

@@ -1,21 +1,19 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\ProductModel;
+
+use App\Models\ProductModel; 
 
 class Home extends BaseController
 {
     protected $productModel;
-    public function __construct()
+    function __construct(){
+    $this->productModel = new ProductModel();
+}
+    public function index(): string
     {
-        $this->productModel = new ProductModel();
-    }
-
-    public function index()
-    {
-        $products = $this->productModel->findAll();
-        $data['products'] = $products;
-
-        return view('v_home', $data);
+        return view('v_home', [
+	'products' => $this->productModel->findAll()
+]);
     }
 }
