@@ -51,4 +51,8 @@
 
 <a href="<?= base_url('keranjang/clear') ?>" class="btn btn-warning">Kosongkan Keranjang</a>
 
+<?php if (!empty($items)) : ?>
+    <a class="btn btn-success" href="<?php echo base_url() ?>checkout">Selesai Belanja</a>
+<?php endif; ?>
+
 <?= $this->endSection() ?>
