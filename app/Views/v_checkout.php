@@ -66,7 +66,14 @@
                 ?>
                     <tr>
                         <td><?= $item['name'] ?></td>
-                        <td><?= number_to_currency($item['price'], 'IDR') ?></td>
+                        <td>
+                            <?php if (isset($item['options']['harga_asli']) && $item['options']['harga_asli'] > $item['price']): ?>
+                                <s><?= number_to_currency($item['options']['harga_asli'], 'IDR') ?></s><br>
+                                <span class="text-success"><?= number_to_currency($item['price'], 'IDR') ?></span>
+                            <?php else: ?>
+                                <?= number_to_currency($item['price'], 'IDR') ?>
+                            <?php endif; ?>
+                        </td>
                         <td><?= $item['qty'] ?></td>
                         <td><?= number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
                     </tr>

@@ -22,8 +22,29 @@ class TransaksiController extends BaseController
         $this->transactionDetailModel = new TransactionDetailModel();
     }
 
+    private function _updateCartPrices()
+    {
+        $diskon = session()->get('diskon') > 0 ? session()->get('diskon') : 0;
+        foreach ($this->cart->contents() as $item) {
+            $harga_asli = $item['options']['harga_asli'] ?? $item['price'];
+            $harga_baru = max(0, $harga_asli - $diskon);
+            
+            $options = $item['options'];
+            $options['harga_asli'] = $harga_asli;
+
+            if ($item['price'] != $harga_baru || !isset($item['options']['harga_asli'])) {
+                $this->cart->update([
+                    'rowid' => $item['rowid'],
+                    'price' => $harga_baru,
+                    'options' => $options
+                ]);
+            }
+        }
+    }
+
     public function index()
     {
+        $this->_updateCartPrices();
         return view('v_keranjang', [
             'items' => $this->cart->contents(),
             'total' => $this->cart->total()
@@ -32,12 +53,19 @@ class TransaksiController extends BaseController
 
     public function cart_add()
     {
+        $harga_asli = $this->request->getPost('harga');
+        $diskon = session()->get('diskon') > 0 ? session()->get('diskon') : 0;
+        $harga_baru = max(0, $harga_asli - $diskon);
+
         $this->cart->insert([
             'id' => $this->request->getPost('id'),
             'qty' => 1,
-            'price' => $this->request->getPost('harga'),
+            'price' => $harga_baru,
             'name' => $this->request->getPost('nama'),
-            'options' => ['foto' => $this->request->getPost('foto')]
+            'options' => [
+                'foto' => $this->request->getPost('foto'),
+                'harga_asli' => $harga_asli
+            ]
         ]);
         session()->setFlashdata('success', 'Produk berhasil ditambahkan ke keranjang');
         return redirect()->to(base_url('/'));
@@ -73,6 +101,7 @@ class TransaksiController extends BaseController
 
     public function checkout()
     { 
+        $this->_updateCartPrices();
         $data = [
             'items' => $this->cart->contents(),
             'total' => $this->cart->total()
@@ -140,6 +169,7 @@ class TransaksiController extends BaseController
 
     public function buy()
     {
+        $this->_updateCartPrices();
         $cartItems = $this->cart->contents();
 
         if (empty($cartItems)) {
@@ -172,11 +202,12 @@ class TransaksiController extends BaseController
         $transactionId = $this->transactionModel->getInsertID();
 
         foreach ($cartItems as $item) {
+            $diskon_item = isset($item['options']['harga_asli']) ? ($item['options']['harga_asli'] - $item['price']) : 0;
             $this->transactionDetailModel->insert([
                 'transaction_id' => $transactionId,
                 'product_id'     => $item['id'],
                 'jumlah'         => $item['qty'],
-                'diskon'         => 0,
+                'diskon'         => $diskon_item,
                 'subtotal_harga' => $item['qty'] * $item['price']
             ]);
         }
