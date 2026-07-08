@@ -52,4 +52,5 @@ $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
 $routes->get('contact', 'Home::contact', ['filter' => 'auth']);
 
 $routes->resource('api/products', ['controller' => 'Api\ProdukController']);
+$routes->resource('api/discounts', ['controller' => 'Api\DiscountController']);
 $routes->get('api/transactions', 'Api\TransaksiController::index');
