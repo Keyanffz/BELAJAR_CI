@@ -21,7 +21,15 @@
                 <div class="card">
                     <div class="card-body">
                         <img src="<?= base_url() . "img/" . $item['foto'] ?>" alt="..." width="50%">
-                        <h5 class="card-title"><?= $item['nama'] ?><br><?= number_to_currency($item['harga'], 'IDR') ?></h5>
+                        <h5 class="card-title">
+                            <?= $item['nama'] ?><br>
+                            <?php if (session()->get('diskon') > 0): ?>
+                                <s><?= number_to_currency($item['harga'], 'IDR') ?></s><br>
+                                <span class="text-success"><?= number_to_currency($item['harga'] - session()->get('diskon'), 'IDR') ?></span>
+                            <?php else: ?>
+                                <?= number_to_currency($item['harga'], 'IDR') ?>
+                            <?php endif; ?>
+                        </h5>
                         <button type="submit" class="btn btn-primary">Beli</button>
                     </div>
                 </div>

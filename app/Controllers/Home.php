@@ -14,7 +14,7 @@ class Home extends BaseController
     public function index(): string
     {
         return view('v_home', [
-	'products' => $this->productModel->findAll()
-]);
+            'products' => $this->productModel->findAll()
+        ]);
     }
 }

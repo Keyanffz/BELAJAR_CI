@@ -40,6 +40,14 @@ abstract class BaseController extends Controller
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.
-        // $this->session = service('session');
+        $this->session = service('session');
+
+        $db = \Config\Database::connect();
+        $diskon = $db->table('discount')->where('tanggal', date('Y-m-d'))->get()->getRow();
+        if ($diskon) {
+            $this->session->set('diskon', $diskon->nominal);
+        } else {
+            $this->session->set('diskon', 0);
+        }
     }
 }

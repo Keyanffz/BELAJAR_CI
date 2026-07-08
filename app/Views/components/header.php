@@ -25,6 +25,13 @@
           </a>
         </li><!-- End Search Icon-->
 
+        <!-- Discount Badge -->
+        <?php if (session()->get('diskon') > 0): ?>
+        <li class="nav-item d-flex align-items-center pe-3">
+          <span class="badge bg-warning text-dark">Hari ini ada diskon IDR <?= number_format(session()->get('diskon'), 0, ',', '.') ?> per item</span>
+        </li>
+        <?php endif; ?>
+
         <li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
